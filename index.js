@@ -12,7 +12,6 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 
-// test
 if (!config.get("jwtPrivateKey")) {
   console.error("FETAL ERROR: jwtPrivateKey is not defined.");
   process.exit(1);
