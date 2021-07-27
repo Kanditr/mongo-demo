@@ -11,3 +11,7 @@ logging error
         };
     
 function.js
+
+- How to log winston metadata? / winston format
+- winston exception handler
+- process master -> automatically restart
