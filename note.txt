@@ -12,6 +12,6 @@ logging error
     
 function.js
 
-- How to log winston metadata? / winston format
-- winston exception handler
-- process master -> automatically restart
+[x] How to log winston metadata? / winston format
+[x] winston exception handler
+[ ] process master -> automatically restart
