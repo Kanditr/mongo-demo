@@ -38,14 +38,19 @@ module.exports = function () {
   // keep log file in winston transports
   const files = new winston.transports.File({
     filename: "logfile.log",
-    format: format.combine(format.timestamp(), format.prettyPrint()),
+    format: format.combine(
+      format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+      format.prettyPrint(),
+      logFormat
+    ),
   });
 
   const console = new winston.transports.Console({
     format: format.combine(
-      format.timestamp(),
+      format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
       format.colorize(),
-      format.simple()
+      format.simple(),
+      logFormat
     ),
   });
 

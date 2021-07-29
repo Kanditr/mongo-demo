@@ -2,4 +2,13 @@
 [x] How to log winston metadata? / winston format
 [x] winston exception handler
 [ ] process master -> automatically restart
-[ ] refactor winston format for general error and info
+[x] refactor winston format for general error and info
+[ ] refactor winston format to clean up all duplicate logging format codes
+
+
+----  Automated testing ----
+
+types of testing
+    - unit test: test without external dependencies
+    - integration test: test with external dependencies
+    - end-to-end test: drives an application through its UI
