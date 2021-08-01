@@ -1,23 +1,9 @@
-# Integration Test9
+const request = require("supertest");
+const { Genre } = require("../../models/genre");
 
-To get start run
+let server;
 
-```
-export vidly_jwtPrivateKey=mySecureKey
-```
-
-And then set the test environment
-
-```
-NODE_ENV=test node index.js
-```
-
-When we edit the code, jest will rerun automatically and load the server again causing exception because we already has the server up and run on port 3000. So in the integration test we should load the server before and shutdown after test
-
-```JS
- describe("/api/genres", () => {
-
-  // clean up the test so it is repeatable
+describe("/api/genres", () => {
   beforeEach(() => {
     server = require("../../index");
   });
@@ -25,7 +11,6 @@ When we edit the code, jest will rerun automatically and load the server again c
     server.close();
     await Genre.remove({});
   });
-
   describe("GET /", () => {
     it("should return all genres", async () => {
       await Genre.collection.insertMany([
@@ -42,4 +27,3 @@ When we edit the code, jest will rerun automatically and load the server again c
     });
   });
 });
-```

@@ -1,15 +1,15 @@
 const winston = require("winston");
 const mongoose = require("mongoose");
 require("./logging");
+const config = require("config");
 
 module.exports = function () {
-  //   const files = new winston.transports.File({ filename: "logfile2.log" });
-  //   winston.add(files);
+  const db = config.get("db");
   mongoose
-    .connect("mongodb://localhost/vidly", {
+    .connect(db, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useCreateIndex: true,
     })
-    .then(() => winston.info("Connected to MongoDB..."));
+    .then(() => winston.info(`Connected to ${db}...`));
 };
