@@ -1,15 +1,21 @@
-# Integration Test9
+# Integration Test
 
-To get start run
+To get start
 
 ```
 export vidly_jwtPrivateKey=mySecureKey
 ```
 
-And then set the test environment
+Set the test environment
 
 ```
 NODE_ENV=test node index.js
+```
+
+run
+
+```
+npm test
 ```
 
 When we edit the code, jest will rerun automatically and load the server again causing exception because we already has the server up and run on port 3000. So in the integration test we should load the server before and shutdown after test
