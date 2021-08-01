@@ -1,17 +1,14 @@
-logging error
-    - Level of Logging error
-        const levels = { 
-            error: 0,
-            warn: 1,
-            info: 2,
-            http: 3,
-            verbose: 4,
-            debug: 5,
-            silly: 6
-        };
-    
-function.js
-
+29-July-2021
 [x] How to log winston metadata? / winston format
 [x] winston exception handler
 [ ] process master -> automatically restart
+[x] refactor winston format for general error and info
+[ ] refactor winston format to clean up all duplicate logging format codes
+
+
+----  Automated testing ----
+
+types of testing
+    - unit test: test without external dependencies
+    - integration test: test with external dependencies
+    - end-to-end test: drives an application through its UI

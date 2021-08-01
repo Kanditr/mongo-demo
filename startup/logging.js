@@ -4,79 +4,72 @@ require("winston-mongodb");
 require("express-async-errors");
 
 module.exports = function () {
-  // handle exceptions
-  winston.exceptions.handle(
-    new winston.transports.Console({
-      format: format.combine(
-        format.simple(),
-        format.timestamp(),
-        format.colorize(),
-        format.simple()
-      ),
-    }),
-    new winston.transports.File({ filename: "exceptions.log" })
-  );
+  // logging format
+  const logFormat = format.printf(({ level, message, timestamp }) => {
+    return `${timestamp} ${level}: ${message}`;
+  });
 
-  //   // new method
-  //   const logger = createLogger({
-  //     format: format.combine(format.timestamp(), format.simple()),
-  //     transports: [new transports.File({ filename: "combined.log" })],
-  //     exceptionHandlers: [new transports.File({ filename: "exceptions.log" })],
-  //   });
+  // handle uncaught exceptions
+  winston.createLogger({
+    format: format.combine(
+      format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+      format.colorize(),
+      logFormat
+    ),
+    exceptionHandlers: [
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: "exceptions.log" }),
+    ],
+  });
 
-  //   logger.info({
-  //     message: "test new logging method",
-  //   });
-
-  // handle rejections by throwing exception to exceptions handler
-  process.on("unhandledRejection", (ex) => {
-    throw ex;
+  // handle uncaught rejections
+  winston.createLogger({
+    format: format.combine(
+      format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+      format.colorize(),
+      logFormat
+    ),
+    rejectionHandlers: [
+      new winston.transports.Console(),
+      new winston.transports.File({ filename: "rejections.log" }),
+    ],
   });
 
   // keep log file in winston transports
-  winston.add(
-    new winston.transports.Console({
-      format: format.combine(
-        format.simple(),
-        format.timestamp(),
-        format.colorize(),
-        format.simple()
-      ),
-    })
-  );
-  winston.add(new winston.transports.File({ filename: "logfile.log" }));
-  winston.add(
-    new winston.transports.MongoDB({
-      db: "mongodb://localhost/vidly",
-      level: "info",
-      options: {
-        useUnifiedTopology: true,
-      },
-    })
-  );
+  const files = new winston.transports.File({
+    filename: "logfile.log",
+    format: format.combine(
+      format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+      format.prettyPrint(),
+      logFormat
+    ),
+  });
 
-  //   // // test - uncaught promises rejection
-  //   // const p = Promise.reject(new Error("Something failed miserably!"));
-  //   // p.then(() => console.log("Done"));
+  const console = new winston.transports.Console({
+    format: format.combine(
+      format.timestamp({ format: "YYYY-MM-DD HH:mm:ss" }),
+      format.colorize(),
+      format.simple(),
+      logFormat
+    ),
+  });
 
-  //   // test - uncaught exception
-  //   throw new Error("Something failed during startup.");
+  const db = new winston.transports.MongoDB({
+    db: "mongodb://localhost/vidly",
+    level: "info",
+    options: {
+      useUnifiedTopology: true,
+    },
+  });
+
+  winston.add(console);
+  winston.add(files);
+  winston.add(db);
+
+  // // test - uncaught exception
+  // throw new Error("Something failed during startup.");
+
+  // // test - uncaught promises rejection
+  // const p = Promise.reject(new Error("Something failed miserably!"));
+  // p.then(() => console.log("Done"));
 };
-
-// const logger = createLogger({
-//   format: format.combine(format.timestamp(), format.simple()),
-//   transports: [
-//     new transports.Console({
-//       format: format.combine(
-//         format.timestamp(),
-//         format.colorize(),
-//         format.simple()
-//       ),
-//     }),
-//     new winston.transports.File({ filename: "example.log" }),
-//   ],
-// });
-
-// logger.info({
-//   message: "Check example.log – it will have no colors!",
-// });
